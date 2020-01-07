@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\piete\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\piete\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_DiskSpeedTest.102122604.00" t="ExcludeRecursive" />
+    <e p="C:\Users\piete\source\repos\DiskSpeedTest" t="IncludeRecursive">
+      <e p=".gitignore" t="Include" />
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="DiskSpeed.cs" t="Include" />
+      <e p="DiskSpeedTest.csproj" t="IncludeRecursive" />
+      <e p="DiskSpeedTest.sln" t="IncludeFlat" />
+      <e p="Example.txt" t="Include" />
+      <e p="Example.xml" t="Include" />
+      <e p="LICENSE" t="Include" />
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp3.1" t="Include">
+            <e p="DiskSpeedTest.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="ProcessEx.cs" t="Include" />
+      <e p="Program.cs" t="Include" />
+      <e p="README.md" t="Include" />
+      <e p="TestParameter.cs" t="Include" />
+      <e p="TestResult.cs" t="Include" />
+    </e>
+  </component>
+</project>
