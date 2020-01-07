@@ -5,4 +5,14 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="DiskSpeedTest.sln.DotSettings" />
+    <None Remove="LICENSE" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="InsaneGenius.Utilities" Version="1.1.20200107.12" />
+  </ItemGroup>
+
 </Project>

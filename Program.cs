@@ -8,10 +8,10 @@ namespace DiskSpeedTest
 {
     static class Program
     {
-        static void Main(string[] _)
+        static int Main(string[] _)
         {
             // Output file
-            const string resultsFile = @"D:\SpeedTestResults.csv";
+            const string resultsFile = @"C:\SpeedTestResults.csv";
 
             // CSV header
             StringBuilder resultText = new StringBuilder();
@@ -19,9 +19,10 @@ namespace DiskSpeedTest
 
             // Test targets
             List<TestTarget> testTargets = new List<TestTarget>();
+            testTargets.Add(new TestTarget {FileName = @"C:\Temp\SpeedTestDataFile.dat"});
             // testTargets.Add(new TestTarget {FileName = @"D:\SpeedTestDataFile.dat"});
             // testTargets.Add(new TestTarget {FileName = @"\\Server-2\CacheSpeedTest\SpeedTestDataFile.dat"});
-            testTargets.Add(new TestTarget { FileName = @"\\Server-2\DiskSpeedTest\SpeedTestDataFile.dat" });
+            // testTargets.Add(new TestTarget { FileName = @"\\Server-2\DiskSpeedTest\SpeedTestDataFile.dat" });
 
             // Test parameters
             // Block size from 4K to 2MB
@@ -53,7 +54,11 @@ namespace DiskSpeedTest
                 else 
                 {
                     Console.WriteLine($"Creating new test file : {testTarget.FileName}");
-                    DiskSpeed.CreateTestTarget(testTarget);
+                    if (DiskSpeed.CreateTestTarget(testTarget) != 0)
+                    {
+                        Console.WriteLine($"Failed to create test file : {testTarget.FileName}");
+                        return -1;
+                    }
                 }
                 Console.WriteLine("");
 
@@ -64,7 +69,11 @@ namespace DiskSpeedTest
                     iteration ++;
                     Console.WriteLine($"Running test {iteration} of {totalIterations}");
                     string xml;
-                    DiskSpeed.RunSpeedTest(testTarget, testParameter, out xml);
+                    if (DiskSpeed.RunSpeedTest(testTarget, testParameter, out xml) != 0)
+                    {
+                        Console.WriteLine($"Failed to run test");
+                        return -1;
+                    }
 
                     // Parse results
                     TestResult.Results results = TestResult.FromXml(xml);
@@ -90,6 +99,8 @@ namespace DiskSpeedTest
             // Write results to file
             File.WriteAllText(resultsFile, resultText.ToString());
             Console.WriteLine($"Writing test results to : {resultsFile}");
+
+            return 0;
         }
     }
 }
