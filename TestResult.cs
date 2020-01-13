@@ -1,17 +1,54 @@
 ﻿using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
+using System;
+using System.Globalization;
+using System.Xml;
 
-// https://xmltocsharp.azurewebsites.net/
 namespace DiskSpeedTest
 {
-	public static class TestResult
+	public class TestResult
+	{
+		public void FromXml(string xml)
+		{
+			// Parse xml
+			TestResultXml.Results xmlResults = TestResultXml.FromXml(xml);
+
+			// Calculated IO's and Bytes per second
+			Bytes = 0;
+			Ios = 0;
+            foreach (TestResultXml.Thread thread in xmlResults.TimeSpan.Thread)
+            {
+                Bytes += Convert.ToInt64(thread.Target.BytesCount, CultureInfo.InvariantCulture);
+                Ios += Convert.ToInt64(thread.Target.IOCount, CultureInfo.InvariantCulture);
+            }
+			Seconds = Convert.ToDouble(xmlResults.TimeSpan.TestTimeSeconds, CultureInfo.InvariantCulture);
+			BytesPerSec = Bytes / Seconds;
+			IosPerSec = Ios / Seconds;
+		}
+
+		public long Bytes { get; set; }
+		public long Ios { get; set; }
+		public double Seconds { get; set; }
+		public double BytesPerSec { get; set; }
+		public double IosPerSec { get; set; }
+	}
+
+	// Code generated from SpdDisk XML output
+	// https://xmltocsharp.azurewebsites.net/
+	// ReSharper disable All
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1034 // Nested types should not be visible
+#pragma warning disable CA2227 // Collection properties should be read only
+#pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
+#pragma warning disable CA1724 // System namespace conflict
+	public class TestResultXml
 	{
 		public static Results FromXml(string xml)
 		{
-			XmlSerializer xmlserializer = new XmlSerializer(typeof(Results));
-			TextReader textreader = new StringReader(xml);
-			return xmlserializer.Deserialize(textreader) as Results;
+			XmlSerializer xmlSerializer = new XmlSerializer(typeof(Results));
+			using XmlReader xmlReader = XmlReader.Create(new StringReader(xml));
+			return xmlSerializer.Deserialize(xmlReader) as Results;
 		}
 
 		[XmlRoot(ElementName = "Tool")]
@@ -276,4 +313,10 @@ namespace DiskSpeedTest
 			public TimeSpan TimeSpan { get; set; }
 		}
 	}
+#pragma warning restore CA1707 // Identifiers should not contain underscores
+#pragma warning restore CA1034 // Nested types should not be visible
+#pragma warning restore CA2227 // Collection properties should be read only
+#pragma warning restore CA1052 // Static holder types should be Static or NotInheritable
+#pragma warning restore CA1724 // System namespace conflict
+	// ReSharper enable All
 }

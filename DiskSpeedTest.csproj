@@ -6,13 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
     <None Remove="DiskSpeedTest.sln.DotSettings" />
     <None Remove="LICENSE" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="InsaneGenius.Utilities" Version="1.1.20200107.12" />
+    <PackageReference Include="InsaneGenius.Utilities" Version="1.2.20200108.5" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

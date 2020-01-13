@@ -1,25 +1,12 @@
 ﻿namespace DiskSpeedTest
 {
-    public static class Format
-    {
-        public const int KiB = 1024;
-        public const int MiB = KiB * 1024;
-        public const int GiB = MiB * 1024;
-    }
-
-    public class TestTarget
-    {
-        public string FileName;
-        public long FileSize = 64L * Format.GiB;
-    }
-
     public class TestParameter
     {
-        public int BlockSize = 4 * Format.KiB;
-        public int WriteRatio = 50;
-        public int ThreadCount = 2;
-        public int OutstandingOperations = 8;
-        public int WarmupTime = 60;
-        public int TestTime = 120;
+        public int BlockSize { get; set; } = 4 * Format.KiB;
+        public int WriteRatio { get; set; } = 50;
+        public int ThreadCount { get; set; } = 2;
+        public int OutstandingOperations { get; set; } = 8;
+        public int WarmupTime { get; set; } = 30;
+        public int TestTime { get; set; } = 120;
     }
 }
