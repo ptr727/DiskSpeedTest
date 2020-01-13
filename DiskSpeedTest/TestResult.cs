@@ -27,11 +27,11 @@ namespace DiskSpeedTest
 			IosPerSec = Ios / Seconds;
 		}
 
-		public long Bytes { get; set; }
-		public long Ios { get; set; }
-		public double Seconds { get; set; }
-		public double BytesPerSec { get; set; }
-		public double IosPerSec { get; set; }
+		public long Bytes { get; private set; }
+		public long Ios { get; private set; }
+		public double Seconds { get; private set; }
+		public double BytesPerSec { get; private set; }
+		public double IosPerSec { get; private set; }
 	}
 
 	// Code generated from SpdDisk XML output

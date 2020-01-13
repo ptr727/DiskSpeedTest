@@ -1,35 +1,48 @@
 ﻿using InsaneGenius.Utilities;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DiskSpeedTest
 {
     internal static class Program
     {
-        private static int Main()
+        private static int Main(string[] args)
         {
+            // Load config from file
+            if (args.Length != 1)
+            {
+                ConsoleEx.WriteLineError("Usage : DiskSpeedTest.exe [JSON config file]");
+                return -1;
+            }
+            string configFile = args[0];
+            ConsoleEx.WriteLine($"Loading config from : \"{configFile}\"");
+            if (!File.Exists(configFile))
+            {
+                ConsoleEx.WriteLineError($"Config file not found : \"{configFile}\"");
+                return -1;
+            }
+            Config config = Config.FromFile(configFile);
+            if (config == null)
+            {
+                ConsoleEx.WriteLineError($"Unable to parse config file : \"{configFile}\"");
+                return -1;
+            }
+
             // Result file
-            ResultsFile resultsFile = new ResultsFile(@"D:\SpeedTestResults.csv");
+            ResultsFile resultsFile = new ResultsFile(config.ResultsFile);
             ConsoleEx.WriteLine($"Writing results to : \"{resultsFile.FileName}\"");
             resultsFile.WriteHeader();
 
-            // Test targets
-            // Default 64GB size
+            // Set the test config
             TestRun testRun = new TestRun();
-            testRun.AddTestTargets( new List<string> {
-                /*@"\\Server-1\CacheSpeedTest\SpeedTestDataFile.dat",
-                @"\\Server-1\DiskSpeedTest\SpeedTestDataFile.dat",*/
-                @"\\Server-2\CacheSpeedTest\SpeedTestDataFile.dat"/*,
-                @"\\Server-2\DiskSpeedTest\SpeedTestDataFile.dat",
-                @"\\WIN-EKJ8HU9E5QC\TestW2K19\SpeedTestDataFile.dat"*/ });
-
-            // Block size from 4K to 2MB, 100% Read, 50% Read 50% Write, 100% Write
-            testRun.AddTestBlockRange(4 * Format.KiB, 2 * Format.MiB);
+            testRun.AddTestTargets(config.TestTargets, config.TestTargetSize);
+            testRun.AddTestBlockRange(config.BlockSizeBegin, config.BlockSizeEnd, config.WarmupTime, config.TestTime);
 
             // Estimated time to complete
             int totalIterations = testRun.TestTargets.Count * testRun.TestParameters.Count;
-            int remainingSeconds = testRun.TestParameters.Sum(parameter => parameter.WarmupTime + parameter.TestTime) * testRun.TestTargets.Count;
+            int remainingSeconds = testRun.TestParameters.Sum(parameter => parameter.WarmupTime + parameter.TestTime) * testRun.TestTargets.Count + (totalIterations - 1) * config.RestTime;
             ConsoleEx.WriteLine($"Running {totalIterations} iterations, {remainingSeconds} seconds, estimated to complete by {DateTime.Now + TimeSpan.FromSeconds(remainingSeconds)}");
             ConsoleEx.WriteLine("");
 
@@ -59,12 +72,24 @@ namespace DiskSpeedTest
                 // Run all tests against target
                 foreach (TestParameter testParameter in testRun.TestParameters)
                 {
-                    // Run speed test
+                    // Calculate test times
                     iteration ++;
-                    remainingSeconds -= testParameter.WarmupTime + testParameter.TestTime;
+                    int thisTestTime = testParameter.WarmupTime + testParameter.TestTime + (iteration > 1 ? config.RestTime : 0);
+                    remainingSeconds -= thisTestTime;
                     ConsoleEx.WriteLine($"Running test {iteration} of {totalIterations}, " +
-                        $"iteration to complete by {DateTime.Now + TimeSpan.FromSeconds(testParameter.WarmupTime + testParameter.TestTime)}, " +
-                        $"remaining tests to complete by {DateTime.Now + TimeSpan.FromSeconds(remainingSeconds + testParameter.WarmupTime + testParameter.TestTime)}");
+                        $"iteration to complete by {DateTime.Now + TimeSpan.FromSeconds(thisTestTime)}, " +
+                        $"remaining tests to complete by {DateTime.Now + TimeSpan.FromSeconds(remainingSeconds + thisTestTime)}");
+
+                    // Sleep between tests
+                    // This may be required if the target file is in use after a test
+                    if (config.RestTime > 0 && iteration > 1)
+                    {
+                        // TODO : Add Ctrl-C handler so that we can break the test during wait
+                        ConsoleEx.WriteLine($"Resting for {config.RestTime} seconds...");
+                        Task.Delay(config.RestTime * 1000).Wait();
+                    }
+
+                    // Run test
                     if (!TestRun.RunTest(testTarget, testParameter, out TestResult testResult))
                     {
                         resultsFile.AddFailedResult(testTarget, testParameter);

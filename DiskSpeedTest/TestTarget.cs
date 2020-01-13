@@ -17,6 +17,6 @@ namespace DiskSpeedTest
         }
 
         public string FileName { get; set; }
-        public long FileSize { get; } = 64L * Format.GiB;
+        public long FileSize { get; set; } = 64L * Format.GiB;
     }
 }

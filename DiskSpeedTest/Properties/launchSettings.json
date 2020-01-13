@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DiskSpeedTest": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\Pieter_Viljoen\\source\\repos\\DiskSpeedTest\\DiskSpeedTest\\DiskSpeedTest.json\""
+    }
+  }
+}
