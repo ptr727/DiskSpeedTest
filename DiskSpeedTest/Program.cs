@@ -31,7 +31,7 @@ namespace DiskSpeedTest
             }
 
             // Result file
-            ResultsFile resultsFile = new ResultsFile(config.ResultsFile);
+            ResultsFile resultsFile = new ResultsFile($"{DateTime.Now:s}_{config.ResultsFile}");
             ConsoleEx.WriteLine($"Writing results to : \"{resultsFile.FileName}\"");
             resultsFile.WriteHeader();
 

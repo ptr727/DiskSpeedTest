@@ -8,12 +8,9 @@ namespace FileIterationTest
 {
     class Program
     {
+        // https://forums.unraid.net/bug-reports/stable-releases/680-smb-ver-4113-significant-performance-decrease-when-opening-files-in-folders-with-1000-files-in-them-r789/
         static void Main()
         {
-            // TODO : Make retrycounts work even if set to 0
-            // TODO : Add option to not log
-            FileEx.Options.FileRetryCount = 1;
-
             const string targetDirectory = @"C:\Temp\FileIterationTest";
             const int folderDepth = 3;
 
