@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace DiskSpeedTest
 {
-	public class TestResult
+	public class DiskSpeedResult
 	{
 		public void FromXml(string xml)
 		{

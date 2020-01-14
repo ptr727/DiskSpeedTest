@@ -23,6 +23,7 @@ namespace DiskSpeedTest
                 ConsoleEx.WriteLineError($"Config file not found : \"{configFile}\"");
                 return -1;
             }
+            //string exampleJson = Config.ToJson(new Config());
             Config config = Config.FromFile(configFile);
             if (config == null)
             {
@@ -30,82 +31,34 @@ namespace DiskSpeedTest
                 return -1;
             }
 
-            // Result file
-            ResultsFile resultsFile = new ResultsFile($"{DateTime.Now:s}_{config.ResultsFile}");
-            ConsoleEx.WriteLine($"Writing results to : \"{resultsFile.FileName}\"");
-            resultsFile.WriteHeader();
-
-            // Set the test config
-            TestRun testRun = new TestRun();
-            testRun.AddTestTargets(config.TestTargets, config.TestTargetSize);
-            testRun.AddTestBlockRange(config.BlockSizeBegin, config.BlockSizeEnd, config.WarmupTime, config.TestTime);
-
-            // Estimated time to complete
-            int totalIterations = testRun.TestTargets.Count * testRun.TestParameters.Count;
-            int remainingSeconds = testRun.TestParameters.Sum(parameter => parameter.WarmupTime + parameter.TestTime) * testRun.TestTargets.Count + (totalIterations - 1) * config.RestTime;
-            ConsoleEx.WriteLine($"Running {totalIterations} iterations, {remainingSeconds} seconds, estimated to complete by {DateTime.Now + TimeSpan.FromSeconds(remainingSeconds)}");
-            ConsoleEx.WriteLine("");
-
-            // Run all tests
-            int result = 0;
-            int iteration = 0;
-            foreach (TestTarget testTarget in testRun.TestTargets)
+            // Timestamp the result files
+            if (config.TimestampResultFile)
             {
-                // Reuse the existing file, or create a new file file
-                if (testTarget.DoesTargetExist())
-                    ConsoleEx.WriteLine($"Using existing test file : {testTarget.FileName}");
-                else 
-                {
-                    ConsoleEx.WriteLine($"Creating new test file : {testTarget.FileName}");
-                    if (!testTarget.CreateTarget())
-                    {
-                        ConsoleEx.WriteLineError($"Failed to create test file : {testTarget.FileName}");
-                        ConsoleEx.WriteLine("");
+                config.DiskSpeedTest.ResultFile = Format.TimeStampFileName(config.DiskSpeedTest.ResultFile);
+                config.FileIterationTest.ResultFile = Format.TimeStampFileName(config.FileIterationTest.ResultFile);
+            }
 
-                        // Try the next target
-                        result = -1;
-                        continue;
-                    }
-                }
+            // Run DiskSpeedTest
+            int result = 0;
+            if (config.DiskSpeedTest.Enabled)
+            { 
                 ConsoleEx.WriteLine("");
+                ConsoleEx.WriteLine("Running DiskSpeed Test ...");
+                DiskSpeedTest diskSpeedTest = new DiskSpeedTest(config.DiskSpeedTest);
+                if (diskSpeedTest.Run() != 0)
+                    result = -1;
+                ConsoleEx.WriteLine("");
+            }
 
-                // Run all tests against target
-                foreach (TestParameter testParameter in testRun.TestParameters)
-                {
-                    // Calculate test times
-                    iteration ++;
-                    int thisTestTime = testParameter.WarmupTime + testParameter.TestTime + (iteration > 1 ? config.RestTime : 0);
-                    remainingSeconds -= thisTestTime;
-                    ConsoleEx.WriteLine($"Running test {iteration} of {totalIterations}, " +
-                        $"iteration to complete by {DateTime.Now + TimeSpan.FromSeconds(thisTestTime)}, " +
-                        $"remaining tests to complete by {DateTime.Now + TimeSpan.FromSeconds(remainingSeconds + thisTestTime)}");
-
-                    // Sleep between tests
-                    // This may be required if the target file is in use after a test
-                    if (config.RestTime > 0 && iteration > 1)
-                    {
-                        // TODO : Add Ctrl-C handler so that we can break the test during wait
-                        ConsoleEx.WriteLine($"Resting for {config.RestTime} seconds...");
-                        Task.Delay(config.RestTime * 1000).Wait();
-                    }
-
-                    // Run test
-                    if (!TestRun.RunTest(testTarget, testParameter, out TestResult testResult))
-                    {
-                        resultsFile.AddFailedResult(testTarget, testParameter);
-                        ConsoleEx.WriteLineError("Failed to run test");
-                        ConsoleEx.WriteLine("");
-
-                        // Try the next test
-                        result = -1;
-                        continue;
-                    }
-
-                    // Report test results
-                    resultsFile.AddResult(testTarget, testParameter, testResult);
-                    ConsoleEx.WriteLine($"{testTarget.FileName} : {testResult.BytesPerSec / Format.MiB:n} MiB/s, {testResult.IosPerSec:n} IO/s");
-                    ConsoleEx.WriteLine("");
-                }
+            // Run FileIterationTest
+            if (config.FileIterationTest.Enabled)
+            { 
+                ConsoleEx.WriteLine("");
+                ConsoleEx.WriteLine("Running FileIteration Test ...");
+                FileIterationTest fileIterationTest = new FileIterationTest(config.FileIterationTest);
+                if (fileIterationTest.Run() != 0)
+                    result = -1;
+                ConsoleEx.WriteLine("");
             }
 
             return result;

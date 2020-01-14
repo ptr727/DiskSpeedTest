@@ -2,7 +2,7 @@
 
 namespace DiskSpeedTest
 {
-    public class TestTarget
+    public class DiskSpeedTarget
     {
         public bool DoesTargetExist()
         {
@@ -13,7 +13,7 @@ namespace DiskSpeedTest
 
         public bool CreateTarget()
         {
-            return DiskSpeed.CreateTestTarget(this) == 0;
+            return DiskSpeedTool.CreateTestTarget(this) == 0;
         }
 
         public string FileName { get; set; }

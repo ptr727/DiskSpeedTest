@@ -3,16 +3,16 @@ using System;
 
 namespace DiskSpeedTest
 {
-    internal static class DiskSpeed
+    internal static class DiskSpeedTool
     {
-        public static int CreateTestTarget(TestTarget target)
+        public static int CreateTestTarget(DiskSpeedTarget target)
         {
             // E.g.
             // diskspd.exe -c64G \\storage\testcache\testfile64g.dat
             return ExecDiskSpd($"-c{target.FileSize} {target.FileName}", out string _);
         }
 
-        public static int RunSpeedTest(TestTarget target, TestParameter parameter, out string xml)
+        public static int RunSpeedTest(DiskSpeedTarget target, DiskSpeedParameter parameter, out string xml)
         {
             // https://github.com/microsoft/diskspd/wiki/Command-line-and-parameters
             string commands = $"-w{parameter.WriteRatio} -b{parameter.BlockSize} -F{parameter.ThreadCount} -o{parameter.OutstandingOperations} -W{parameter.WarmupTime} -d{parameter.TestTime} -r -Rxml";

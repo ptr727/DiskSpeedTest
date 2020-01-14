@@ -8,32 +8,18 @@ namespace DiskSpeedTest
     {
         public Config()
         {
-            TestTargets = new List<string>();
+            DiskSpeedTest = new DiskSpeedConfig();
+            FileIterationTest = new FileIterationConfig();
         }
 
-        [JsonProperty("resultsfile")]
-        public string ResultsFile { get; set; } = @"SpeedTestResults.csv";
+        [JsonProperty("timestampresultfile")]
+        public bool TimestampResultFile { get; set; } = true;
 
-        [JsonProperty("testtargets")]
-        public List<string> TestTargets { get; }
+        [JsonProperty("diskspeedtest")]
+        public DiskSpeedConfig DiskSpeedTest { get; }
 
-        [JsonProperty("testtargetsize")]
-        public long TestTargetSize { get; set; } = 64L * Format.GiB;
-
-        [JsonProperty("blocksizebegin")]
-        public int BlockSizeBegin { get; set; } = 4 * Format.KiB;
-
-        [JsonProperty("blocksizeend")]
-        public int BlockSizeEnd { get; set; } = 2 * Format.MiB;
-
-        [JsonProperty("warmuptime")]
-        public int WarmupTime { get; set; } = 30;
-
-        [JsonProperty("testtime")]
-        public int TestTime { get; set; } = 120;
-
-        [JsonProperty("resttime")]
-        public int RestTime { get; set; }
+        [JsonProperty("fileiterationtest")]
+        public FileIterationConfig FileIterationTest { get; }
 
         public static Config FromFile(string fileName)
         {

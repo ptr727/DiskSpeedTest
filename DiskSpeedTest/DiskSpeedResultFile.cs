@@ -3,9 +3,9 @@ using System.IO;
 
 namespace DiskSpeedTest
 {
-    public class ResultsFile
+    public class DiskSpeedResultFile
     {
-        public ResultsFile(string fileName)
+        public DiskSpeedResultFile(string fileName)
         {
             FileName = fileName;
         }
@@ -16,7 +16,7 @@ namespace DiskSpeedTest
             File.WriteAllText(FileName, Header + Environment.NewLine);
         }
 
-        public void AddResult(TestTarget testTarget, TestParameter testParameter, TestResult testResult)
+        public void AddResult(DiskSpeedTarget testTarget, DiskSpeedParameter testParameter, DiskSpeedResult testResult)
         {
             if (testTarget == null)
                 throw new ArgumentNullException(nameof(testTarget));
@@ -32,7 +32,7 @@ namespace DiskSpeedTest
             File.AppendAllText(FileName, result + Environment.NewLine);
         }
 
-        public void AddFailedResult(TestTarget testTarget, TestParameter testParameter)
+        public void AddFailedResult(DiskSpeedTarget testTarget, DiskSpeedParameter testParameter)
         {
             if (testTarget == null)
                 throw new ArgumentNullException(nameof(testTarget));
@@ -47,6 +47,6 @@ namespace DiskSpeedTest
         }
 
         public string FileName { get; }
-        private const string Header = "UTC, FileName, FileSize, BlockSize, WriteRatio, ThreadCount, OutstandingOperations, WarmupTime, TestTime, Bytes, IOS";
+        private const string Header = "UTC, Target, FileSize, BlockSize, WriteRatio, ThreadCount, OutstandingOperations, WarmupTime, TestTime, Bytes, IOS";
     }
 }

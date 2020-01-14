@@ -1,6 +1,6 @@
 ﻿namespace DiskSpeedTest
 {
-    public class TestParameter
+    public class DiskSpeedParameter
     {
         public int BlockSize { get; set; } = 4 * Format.KiB;
         public int WriteRatio { get; set; } = 50;
