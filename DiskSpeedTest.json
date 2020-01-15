@@ -9,7 +9,8 @@
     "resultfile": "DiskSpeedResult.csv",
     // Test targets, full path and filename, directory must exist, file will be created
     "targets": [
-      "C:\\Temp\\DiskSpeedData.dat"
+      "C:\\Temp\\DiskSpeedData.dat",
+      "\\\\Server\\Share\\DiskSpeedData.dat"
     ],
     // File size of test target in bytes
     "targetsize": 68719476736,
@@ -31,7 +32,8 @@
     "resultfile": "FileIterationResult.csv",
     // Test targets, full path, directory will be created, contents will be deleted
     "targets": [
-      "C:\\Temp\\FileIteration"
+      "C:\\Temp\\FileIteration",
+      "\\\\Server\\Share\\FileIteration"
     ],
     // Folder depth for recursion
     "folderdepth": 2,
