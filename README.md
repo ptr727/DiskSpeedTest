@@ -25,9 +25,7 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 
 ## JSON Config File
 
-(The GitHub MD JSON parser does not like single line comments)
-
-```json
+```jsonc
 {
   // Add a timestamp to the result output filenames
   "timestampresultfile": false,
