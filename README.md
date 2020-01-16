@@ -90,5 +90,4 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 ## Notes
 
 - I created the utility to help [troubleshoot](https://blog.insanegenius.com/2020/01/16/unraid-smb-performance-v6-7-2-vs-v6-8-1/) Unraid  SMB performance issues.
-- I added the file iteration test to help [troubleshoot](https://forums.unraid.net/bug-reports/stable-releases/680-smb-ver-4113-significant-performance-decrease-when-opening-files-in-folders-with-1000-files-in-them-r789/) Unraid v6.8.1 performance uissues when a folder contains a large number of files.
 - DiskSpd will conditionally use privileged IO functions, so test results will  differ between running elevated or not, do not mix test results.
