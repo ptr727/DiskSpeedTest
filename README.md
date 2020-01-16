@@ -15,7 +15,8 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 
 ## Usage
 
-- I am not publishing binaries, you need to compile your own binary. You will need the [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download), and [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download).
+- I am not publishing binaries, you need to compile your own binary.
+- You will need the [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download), and [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download).
 - Clone and compile the code from [GitHub](https://github.com/ptr727/DiskSpeedTest).
 - Download [DiskSpd](https://aka.ms/diskspd), and place the `diskspd.exe` binary in the path or the working directory.
 - Create a JSON config file with the required test parameters.
