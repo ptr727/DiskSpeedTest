@@ -1,4 +1,6 @@
-﻿namespace DiskSpeedTest
+﻿using InsaneGenius.Utilities;
+
+namespace DiskSpeedTest
 {
     public class DiskSpeedParameter
     {

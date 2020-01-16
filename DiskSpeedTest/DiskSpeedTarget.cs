@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using InsaneGenius.Utilities;
+using System.IO;
 
 namespace DiskSpeedTest
 {
