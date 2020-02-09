@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 
 namespace DiskSpeedTest
 {
@@ -142,8 +141,8 @@ namespace DiskSpeedTest
             while (size > 0);
         }
 
-        private FileIterationConfig Config;
-        const int BufferSize = 64 * Format.KiB;
-        byte[] Buffer;
+        private readonly FileIterationConfig Config;
+        private const int BufferSize = 64 * Format.KiB;
+        readonly byte[] Buffer;
     }
 }

@@ -1,13 +1,11 @@
 ﻿using InsaneGenius.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiskSpeedTest
 {
-    class DiskSpeedTest
+    internal class DiskSpeedTest
     {
         public DiskSpeedTest(DiskSpeedConfig config)
         {
@@ -97,6 +95,6 @@ namespace DiskSpeedTest
             return result;
         }
 
-        private DiskSpeedConfig Config;
+        private readonly DiskSpeedConfig Config;
     }
 }

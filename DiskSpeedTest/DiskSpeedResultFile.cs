@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using InsaneGenius.Utilities;
 
 namespace DiskSpeedTest
 {
@@ -27,8 +26,8 @@ namespace DiskSpeedTest
                 throw new ArgumentNullException(nameof(testResult));
 
             // Add a result line
-            string result = $"{DateTime.UtcNow:s}, \"{testTarget.FileName}\", {testTarget.FileSize}, {Format.BytesToKibi(testParameter.BlockSize)}" +
-                $", {testParameter.WriteRatio}, {testParameter.ThreadCount}, {testParameter.OutstandingOperations}" + 
+            string result = $"{DateTime.UtcNow:s}, \"{testTarget.FileName}\", {testTarget.FileSize}, {testParameter.BlockSizeString}" +
+                $", {testParameter.WriteRatioString}, {testParameter.ThreadCount}, {testParameter.OutstandingOperations}" + 
                 $", {testParameter.WarmupTime}, {testResult.Seconds}, {testResult.Bytes}, {testResult.Ios}";
             File.AppendAllText(FileName, result + Environment.NewLine);
         }
@@ -41,8 +40,8 @@ namespace DiskSpeedTest
                 throw new ArgumentNullException(nameof(testParameter));
 
             // Add a result line
-            string result = $"{DateTime.UtcNow:s}, \"{testTarget.FileName}\", {testTarget.FileSize}, {Format.BytesToKibi(testParameter.BlockSize)}" +
-                $", {testParameter.WriteRatio}, {testParameter.ThreadCount}, {testParameter.OutstandingOperations}" +
+            string result = $"{DateTime.UtcNow:s}, \"{testTarget.FileName}\", {testTarget.FileSize}, {testParameter.BlockSizeString}" +
+                $", {testParameter.WriteRatioString}, {testParameter.ThreadCount}, {testParameter.OutstandingOperations}" +
                 $", {testParameter.WarmupTime}, 0, 0, 0";
             File.AppendAllText(FileName, result + Environment.NewLine);
         }

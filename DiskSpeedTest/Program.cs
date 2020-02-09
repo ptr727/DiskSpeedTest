@@ -1,8 +1,5 @@
 ﻿using InsaneGenius.Utilities;
-using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DiskSpeedTest
 {
@@ -34,8 +31,8 @@ namespace DiskSpeedTest
             // Timestamp the result files
             if (config.TimestampResultFile)
             {
-                config.DiskSpeedTest.ResultFile = Format.TimeStampFileName(config.DiskSpeedTest.ResultFile);
-                config.FileIterationTest.ResultFile = Format.TimeStampFileName(config.FileIterationTest.ResultFile);
+                config.DiskSpeedTest.ResultFile = FileEx.TimeStampFileName(config.DiskSpeedTest.ResultFile);
+                config.FileIterationTest.ResultFile = FileEx.TimeStampFileName(config.FileIterationTest.ResultFile);
             }
 
             // Run DiskSpeedTest
