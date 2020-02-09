@@ -143,6 +143,6 @@ namespace DiskSpeedTest
 
         private readonly FileIterationConfig Config;
         private const int BufferSize = 64 * Format.KiB;
-        readonly byte[] Buffer;
+        private readonly byte[] Buffer;
     }
 }
