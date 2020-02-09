@@ -15,8 +15,7 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 
 ## Usage
 
-- I am not publishing binaries, you need to compile your own binary. You will need the [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download), and [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download).
-- Clone and compile the code from [GitHub](https://github.com/ptr727/DiskSpeedTest).
+- I am not publishing binaries, you need to compile your own binary, [follow](#build) the build instructions.
 - Download [DiskSpd](https://aka.ms/diskspd), and place the `diskspd.exe` binary in the path or the working directory.
 - Create a JSON config file with the required test parameters.
 - Specify the path to the JSON config on the commandline, e.g. `DiskSpeedTest.exe DiskSpeedTest.json`.
@@ -24,7 +23,7 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 
 ## JSON Config File
 
-```json
+```jsonc
 {
   // Add a timestamp to the result output filenames
   "timestampresultfile": false,
@@ -86,6 +85,48 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 
 ## Notes
 
-- I created the utility to help [troubleshoot](https://blog.insanegenius.com/2019/06/10/unraid-in-production-a-bit-rough-around-the-edges-and-terrible-smb-performance/) UnRaid v6.7.2 SMB performance issues.
-- I added the file iteration test to help [troubleshoot](https://forums.unraid.net/bug-reports/stable-releases/680-smb-ver-4113-significant-performance-decrease-when-opening-files-in-folders-with-1000-files-in-them-r789/) Unraid v6.8.1 performance uissues when a folder contains a large number of files.
+- I created the utility to help [troubleshoot](https://blog.insanegenius.com/2020/01/16/unraid-smb-performance-v6-7-2-vs-v6-8-1/) Unraid  SMB performance issues.
 - DiskSpd will conditionally use privileged IO functions, so test results will  differ between running elevated or not, do not mix test results.
+
+## Build
+
+Install [GIT](https://git-scm.com/download) and [.NET Core SDK 3.1](https://dotnet.microsoft.com/download).  
+You could use [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download), or compile from the console:
+- Create a project directory.
+- Initialize GIT.
+- Pull the [reposity](https://github.com/ptr727/DiskSpeedTest.git).
+- Compile the code.
+
+```shell
+C:\Users\piete>md tmp
+C:\Users\piete>cd tmp
+
+C:\Users\piete\tmp>git init
+Initialized empty Git repository in C:/Users/piete/tmp/.git/
+
+C:\Users\piete\tmp>git pull https://github.com/ptr727/DiskSpeedTest.git
+...
+From https://github.com/ptr727/DiskSpeedTest
+ * branch            HEAD       -> FETCH_HEAD
+
+C:\Users\piete>cd DiskSpeedTest
+
+C:\Users\piete\tmp\DiskSpeedTest>dotnet build
+Microsoft (R) Build Engine version 16.4.0+e901037fe for .NET Core
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+  Restore completed in 175.55 ms for C:\Users\piete\tmp\DiskSpeedTest\DiskSpeedTest.csproj.
+...
+DiskSpeedTest -> C:\Users\piete\tmp\DiskSpeedTest\bin\Debug\netcoreapp3.1\DiskSpeedTest.dll
+...
+Build succeeded.
+...
+    3 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.05
+
+C:\Users\piete\tmp\DiskSpeedTest>cd bin\Debug\netcoreapp3.1
+C:\Users\piete\tmp\DiskSpeedTest\bin\Debug\netcoreapp3.1>DiskSpeedTest.exe
+1/17/2020 7:31:15 AM : Usage : DiskSpeedTest.exe [JSON config file]
+```
