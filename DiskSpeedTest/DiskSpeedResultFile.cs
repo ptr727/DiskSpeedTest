@@ -26,9 +26,9 @@ namespace DiskSpeedTest
                 throw new ArgumentNullException(nameof(testResult));
 
             // Add a result line
-            string result = $"{DateTime.UtcNow:s}, \"{testTarget.FileName}\", {testTarget.FileSize}, {testParameter.BlockSize}" +
-                $", {testParameter.WriteRatio}, {testParameter.ThreadCount}, {testParameter.OutstandingOperations}" + 
-                $", {testParameter.WarmupTime}, {testResult.Seconds}, {testResult.Bytes}, {testResult.Ios}";
+            string result = $"{DateTime.UtcNow:s},\"{testTarget.FileName}\",{testTarget.FileSize},{testParameter.BlockSizeString}" +
+                $",{testParameter.WriteRatioString},{testParameter.ThreadCount},{testParameter.OutstandingOperations}" + 
+                $",{testParameter.WarmupTime},{testResult.Seconds},{testResult.Bytes},{testResult.Ios}";
             File.AppendAllText(FileName, result + Environment.NewLine);
         }
 
@@ -40,13 +40,13 @@ namespace DiskSpeedTest
                 throw new ArgumentNullException(nameof(testParameter));
 
             // Add a result line
-            string result = $"{DateTime.UtcNow:s}, \"{testTarget.FileName}\", {testTarget.FileSize}, {testParameter.BlockSize}" +
-                $", {testParameter.WriteRatio}, {testParameter.ThreadCount}, {testParameter.OutstandingOperations}" +
-                $", {testParameter.WarmupTime}, 0, 0, 0";
+            string result = $"{DateTime.UtcNow:s},\"{testTarget.FileName}\",{testTarget.FileSize},{testParameter.BlockSizeString}" +
+                $",{testParameter.WriteRatioString},{testParameter.ThreadCount},{testParameter.OutstandingOperations}" +
+                $",{testParameter.WarmupTime},0,0,0";
             File.AppendAllText(FileName, result + Environment.NewLine);
         }
 
         public string FileName { get; }
-        private const string Header = "UTC, Target, FileSize, BlockSize, WriteRatio, ThreadCount, OutstandingOperations, WarmupTime, TestTime, Bytes, IOS";
+        private const string Header = "UTC,Target,FileSize,BlockSize,WriteRatio,ThreadCount,OutstandingOperations,WarmupTime,TestTime,Bytes,IOS";
     }
 }
