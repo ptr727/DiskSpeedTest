@@ -3,19 +3,21 @@
 Utility to automate iterative IO performance tests.  
 The tool includes two tests, one using the [DiskSpd](https://github.com/microsoft/diskspd) utility, and another iterating bulk file create, read, and delete operations.  
 
-_**Use at your own risk, the tool can be destructive.**_
+_**Use at your own risk, the DiskSpd tool can be destructive.**_
 
 ## License
 
-[![GitHub](https://img.shields.io/github/license/ptr727/DiskSpeedTest)](https://github.com/ptr727/DiskSpeedTest/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/ptr727/DiskSpeedTest)](https://github.com/ptr727/DiskSpeedTest/blob/master/LICENSE)  
+Licensed under the [MIT license](LICENSE).
 
 ## Project
 
-Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
+![GitHub last commit](https://img.shields.io/github/last-commit/ptr727/diskspeedtest?logo=github)  
+Project code is on [GitHub](https://github.com/ptr727/DiskSpeedTest).
 
 ## Usage
 
-- I am not publishing binaries, you need to compile your own binary, [follow](#build) the build instructions.
+- I am not publishing binaries, you can easily compile your own binary, [follow](#build) the build instructions.
 - Download [DiskSpd](https://aka.ms/diskspd), and place the `diskspd.exe` binary in the path or the working directory.
 - Create a JSON config file with the required test parameters.
 - Specify the path to the JSON config on the commandline, e.g. `DiskSpeedTest.exe DiskSpeedTest.json`.
@@ -90,14 +92,14 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 
 ## Build
 
-Install [GIT](https://git-scm.com/download) and [.NET Core SDK 3.1](https://dotnet.microsoft.com/download).  
-You could use [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download), or compile from the console:
-- Create a project directory.
-- Initialize GIT.
-- Pull the [reposity](https://github.com/ptr727/DiskSpeedTest.git).
-- Compile the code.
+- Install [GIT](https://git-scm.com/download) and [.NET Core SDK 3.1](https://dotnet.microsoft.com/download).  
+- Use [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download), or compile from the console:
+  - Create a project directory.
+  - Initialize GIT.
+  - Pull the [reposity](https://github.com/ptr727/DiskSpeedTest.git).
+  - Compile the code.
 
-```shell
+```console
 C:\Users\piete>md tmp
 C:\Users\piete>cd tmp
 

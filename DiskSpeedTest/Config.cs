@@ -26,12 +26,12 @@ namespace DiskSpeedTest
         }
 
         public static string ToJson(Config config) =>
-            JsonConvert.SerializeObject(config, Settings);
+            JsonConvert.SerializeObject(config, JsonSettings);
 
         public static Config FromJson(string json) =>
-            JsonConvert.DeserializeObject<Config>(json, Settings);
+            JsonConvert.DeserializeObject<Config>(json, JsonSettings);
 
-        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
             MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
             DateParseHandling = DateParseHandling.None,
