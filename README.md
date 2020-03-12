@@ -7,8 +7,8 @@ _**Use at your own risk, the DiskSpd tool can be destructive.**_
 
 ## License
 
-[![GitHub](https://img.shields.io/github/license/ptr727/DiskSpeedTest)](https://github.com/ptr727/DiskSpeedTest/blob/master/LICENSE)  
-Licensed under the [MIT license](LICENSE).
+[![GitHub](https://img.shields.io/github/license/ptr727/DiskSpeedTest)](./LICENSE)  
+Licensed under the [MIT license](./LICENSE).
 
 ## Project
 
