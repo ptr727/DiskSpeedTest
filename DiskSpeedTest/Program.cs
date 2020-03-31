@@ -1,5 +1,7 @@
 ﻿using InsaneGenius.Utilities;
 using System.IO;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 
 namespace DiskSpeedTest
 {
@@ -7,24 +9,62 @@ namespace DiskSpeedTest
     {
         private static int Main(string[] args)
         {
-            // Load config from file
-            if (args.Length != 1)
+            RootCommand rootCommand = CreateCommandLineOptions();
+            return rootCommand.Invoke(args);
+        }
+
+        private static RootCommand CreateCommandLineOptions()
+        {
+            // Root command and global options
+            RootCommand rootCommand = new RootCommand("Utility to automate iterative IO performance tests.");
+
+            // Path to the settings file must always be specified
+            rootCommand.AddOption(
+                new Option<string>("--settings")
+                {
+                    Description = "Path to settings file.",
+                    Required = true
+                });
+
+            // Write defaults to settings file
+            rootCommand.AddCommand(
+                new Command("writedefaults")
+                {
+                    Description = "Write default values to settings file.",
+                    Handler = CommandHandler.Create<string>(WriteDefaultsCommand)
+                });
+
+            // Run test
+            rootCommand.AddCommand(
+                new Command("runtests")
+                {
+                    Description = "Run all tests.",
+                    Handler = CommandHandler.Create<string>(RunTestsCommand)
+                });
+
+            return rootCommand;
+        }
+
+        private static int WriteDefaultsCommand(string settings)
+        {
+            // Write default json to file
+            File.WriteAllText(settings, Config.ToJson(new Config()));
+            return 0;
+        }
+
+        private static int RunTestsCommand(string settings)
+        { 
+            ConsoleEx.WriteLine($"Loading config from : \"{settings}\"");
+            if (!File.Exists(settings))
             {
-                ConsoleEx.WriteLineError("Usage : DiskSpeedTest.exe [JSON config file]");
-                return -1;
-            }
-            string configFile = args[0];
-            ConsoleEx.WriteLine($"Loading config from : \"{configFile}\"");
-            if (!File.Exists(configFile))
-            {
-                ConsoleEx.WriteLineError($"Config file not found : \"{configFile}\"");
+                ConsoleEx.WriteLineError($"Config file not found : \"{settings}\"");
                 return -1;
             }
             //string exampleJson = Config.ToJson(new Config());
-            Config config = Config.FromFile(configFile);
+            Config config = Config.FromFile(settings);
             if (config == null)
             {
-                ConsoleEx.WriteLineError($"Unable to parse config file : \"{configFile}\"");
+                ConsoleEx.WriteLineError($"Unable to parse config file : \"{settings}\"");
                 return -1;
             }
 

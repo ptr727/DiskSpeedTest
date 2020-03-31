@@ -2,7 +2,7 @@
   "profiles": {
     "DiskSpeedTest": {
       "commandName": "Project",
-      "commandLineArgs": "DiskSpeedTest.json"
+      "commandLineArgs": "--settings DiskSpeedTest.json runtests"
     }
   }
 }

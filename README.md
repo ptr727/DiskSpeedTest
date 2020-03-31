@@ -83,8 +83,25 @@ CI is on [Azure DevOps](https://dev.azure.com/pieterv/DiskSpeedTest).
 
 ### Run Tests
 
-`DiskSpeedtest.exe [Config File]`  
-E.g. `DiskSpeedTest.exe DiskSpeedTest.json`.
+```console
+C:\...\netcoreapp3.1>diskspeedtest.exe --help
+DiskSpeedTest:
+  Utility to automate iterative IO performance tests.
+
+Usage:
+  DiskSpeedTest [options] [command]
+
+Options:
+  --settings <settings> (REQUIRED)    Path to settings file.
+  --version                           Show version information
+  -?, -h, --help                      Show help and usage information
+
+Commands:
+  writedefaults    Write default values to settings file.
+  runtests         Run all tests.
+```
+
+Example: `DiskSpeedTest.exe --settings DiskSpeedTest.json runtests`.
 
 ## CSV Output Files
 
