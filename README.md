@@ -7,21 +7,29 @@ _**Use at your own risk, the tool can be destructive.**_
 
 ## License
 
-[![GitHub](https://img.shields.io/github/license/ptr727/DiskSpeedTest)](https://github.com/ptr727/DiskSpeedTest/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/ptr727/diskspeedtest)](./LICENSE)  
+Licensed under the [MIT License](./LICENSE)
 
 ## Project
 
-Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
+![GitHub last commit](https://img.shields.io/github/last-commit/ptr727/diskspeedtest?logo=github)  
+Code is on [GitHub](https://github.com/ptr727/DiskSpeedtest).  
+CI is on [Azure DevOps](https://dev.azure.com/pieterv/DiskSpeedTest).
 
-## Usage
+## Build Status
 
-- I am not publishing binaries, you need to compile your own binary, [follow](#build) the build instructions.
+[![Build Status](https://dev.azure.com/pieterv/DiskSpeedTest/_apis/build/status/DiskSpeedTest-Master-CI?branchName=master)](https://dev.azure.com/pieterv/DiskSpeedtest/_build/latest?definitionId=32&branchName=master)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/ptr727/diskspeedtest?logo=github&sort=semver)
+
+## Getting Started
+
+### Installation
+
+- Install the [.NET Core 3.1 Runtime](https://dotnet.microsoft.com/download) and [download](https://github.com/ptr727/DiskSpeedTest/releases/latest) pre-compiled binaries.
+- Or compile from [code](https://github.com/ptr727/DiskSpeedtest.git) using [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download) or the [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download).
 - Download [DiskSpd](https://aka.ms/diskspd), and place the `diskspd.exe` binary in the path or the working directory.
-- Create a JSON config file with the required test parameters.
-- Specify the path to the JSON config on the commandline, e.g. `DiskSpeedTest.exe DiskSpeedTest.json`.
-- Analyze the CSV result files.
 
-## JSON Config File
+### Configuration
 
 ```jsonc
 {
@@ -73,6 +81,11 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 }
 ```
 
+### Run Tests
+
+- Specify the path to the JSON config on the commandline, e.g. `DiskSpeedTest.exe DiskSpeedTest.json`.
+- Analyze the CSV result files.
+
 ## CSV Output Files
 
 ### DiskSpeedTest CSV
@@ -87,46 +100,3 @@ Code is on [GitHub](https://github.com/ptr727/DiskSpeedTest)
 
 - I created the utility to help [troubleshoot](https://blog.insanegenius.com/2020/01/16/unraid-smb-performance-v6-7-2-vs-v6-8-1/) Unraid  SMB performance issues.
 - DiskSpd will conditionally use privileged IO functions, so test results will  differ between running elevated or not, do not mix test results.
-
-## Build
-
-Install [GIT](https://git-scm.com/download) and [.NET Core SDK 3.1](https://dotnet.microsoft.com/download).  
-You could use [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or [Visual Studio Code](https://code.visualstudio.com/download), or compile from the console:
-- Create a project directory.
-- Initialize GIT.
-- Pull the [reposity](https://github.com/ptr727/DiskSpeedTest.git).
-- Compile the code.
-
-```shell
-C:\Users\piete>md tmp
-C:\Users\piete>cd tmp
-
-C:\Users\piete\tmp>git init
-Initialized empty Git repository in C:/Users/piete/tmp/.git/
-
-C:\Users\piete\tmp>git pull https://github.com/ptr727/DiskSpeedTest.git
-...
-From https://github.com/ptr727/DiskSpeedTest
- * branch            HEAD       -> FETCH_HEAD
-
-C:\Users\piete>cd DiskSpeedTest
-
-C:\Users\piete\tmp\DiskSpeedTest>dotnet build
-Microsoft (R) Build Engine version 16.4.0+e901037fe for .NET Core
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-  Restore completed in 175.55 ms for C:\Users\piete\tmp\DiskSpeedTest\DiskSpeedTest.csproj.
-...
-DiskSpeedTest -> C:\Users\piete\tmp\DiskSpeedTest\bin\Debug\netcoreapp3.1\DiskSpeedTest.dll
-...
-Build succeeded.
-...
-    3 Warning(s)
-    0 Error(s)
-
-Time Elapsed 00:00:01.05
-
-C:\Users\piete\tmp\DiskSpeedTest>cd bin\Debug\netcoreapp3.1
-C:\Users\piete\tmp\DiskSpeedTest\bin\Debug\netcoreapp3.1>DiskSpeedTest.exe
-1/17/2020 7:31:15 AM : Usage : DiskSpeedTest.exe [JSON config file]
-```
