@@ -7,7 +7,7 @@ steps:
 # Required by GitVersion tool
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/tool/dotnet-core-tool-installer?view=azure-devops
 - task: UseDotNet@2
-displayName: 'Install DotNet Core 2.x'
+  displayName: 'Install DotNet Core 2.x'
   inputs:
     packageType: runtime
     version: 2.x
@@ -15,7 +15,7 @@ displayName: 'Install DotNet Core 2.x'
 # Install DotNet Core SDK 3.1.x
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/tool/dotnet-core-tool-installer?view=azure-devops
 - task: UseDotNet@2
-displayName: 'Install DotNet Core SDK 3.1.x'
+  displayName: 'Install DotNet Core SDK 3.1.x'
   inputs:
     packageType: sdk
     version: 3.1.x
