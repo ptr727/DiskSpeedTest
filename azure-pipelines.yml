@@ -72,7 +72,10 @@ steps:
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/github-release?view=azure-devops
 - task: GitHubRelease@1
   displayName: 'Release to GitHub'
-  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop'))
+  # Do not tag any pre-release builds else GitVersion will fail
+  # https://github.com/GitTools/GitVersion/issues/2211
+  #condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop'))
+  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     gitHubConnection: $(GitHubConnection)
     repositoryName: $(Build.Repository.Name)
