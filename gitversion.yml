@@ -1,0 +1,6 @@
+# https://gitversion.net/docs/build-server-support/build-server/azure-devops
+# https://gitversion.net/docs/configuration
+# https://gitversion.net/docs/reference/versioning-modes/versioning-mode
+# https://gitversion.readthedocs.io/en/latest/input/docs/more-info/version-increments/
+
+mode: Mainline
