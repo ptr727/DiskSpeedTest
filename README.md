@@ -1,9 +1,9 @@
 # DiskSpeedTest
 
 Utility to automate iterative IO performance tests.  
-The tool includes two tests, one using the [DiskSpd](https://github.com/microsoft/diskspd) utility, and another iterating bulk file create, read, and delete operations.  
+The tool includes two tests, one using the [DiskSpd](https://github.com/microsoft/diskspd) utility, and another iterating bulk file create, read, and delete operations.
 
-_**Use at your own risk, the tool can be destructive.**_
+I created the utility to help [troubleshoot](https://blog.insanegenius.com/2020/01/16/unraid-smb-performance-v6-7-2-vs-v6-8-1/) Unraid  SMB performance issues.
 
 ## License
 
@@ -83,20 +83,22 @@ CI is on [Azure DevOps](https://dev.azure.com/pieterv/DiskSpeedTest).
 
 ### Run Tests
 
-- Specify the path to the JSON config on the commandline, e.g. `DiskSpeedTest.exe DiskSpeedTest.json`.
-- Analyze the CSV result files.
+`DiskSpeedtest.exe [Config File]`  
+E.g. `DiskSpeedTest.exe DiskSpeedTest.json`.
 
 ## CSV Output Files
 
-### DiskSpeedTest CSV
+Import the CSV results in Excel and use pivot tables for analysis.
+
+### DiskSpeedTest CSV Format
 
 `UTC, Target, FileSize, BlockSize, WriteRatio, ThreadCount, OutstandingOperations, WarmupTime, TestTime, Bytes, IOS`
 
-### FileIterationTest CSV
+### FileIterationTest CSV Format
 
 `UTC, Target, FileSize, FolderDepth, FoldersPerFolder, FilesPerFolder, FolderCount, FileCount, CreateTime, ReadTime, DeleteTime`
 
 ## Notes
 
-- I created the utility to help [troubleshoot](https://blog.insanegenius.com/2020/01/16/unraid-smb-performance-v6-7-2-vs-v6-8-1/) Unraid  SMB performance issues.
-- DiskSpd will conditionally use privileged IO functions, so test results will  differ between running elevated or not, do not mix test results.
+- `DiskSpd` can be destructive, especially when running elevated, _**use at your own risk.**_
+- `DiskSpd` will use privileged IO functions when running elevated. Test results will differ between running elevated or not, do not mix test results.

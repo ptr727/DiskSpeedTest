@@ -1,3 +1,7 @@
+variables:
+  # $(BuildConfiguration) must be set in the pipeline variables
+  GitHubConnection: 'github.com_ptr727'
+
 pool:
   vmImage: windows-2019
 
@@ -34,20 +38,20 @@ steps:
 - task: Assembly-Info-NetCore@2
   displayName: 'Set Manifest Version Information'
   inputs:
-    FileNames: 'DiskSpeedTest/DiskSpeedTest.csproj'
+    FileNames: '**/*.csproj'
     VersionNumber: $(GitVersion.AssemblySemVer)
     FileVersionNumber: $(GitVersion.AssemblySemFileVer)
     InformationalVersion: $(GitVersion.InformationalVersion)
     PackageVersion: $(GitVersion.InformationalVersion)
-    #LogLevel: verbose
 
 # DotNetCore Publish
 - task: DotNetCoreCLI@2
   displayName: 'DotNetCore Publish'
   inputs:
-    command: 'publish'
+    command: publish
     projects: '**/*.csproj'
-    #configuration appears to be ignored, use commandline instead
+    #configuration: $(BuildConfiguration)
+    #configuration is ignored, use commandline instead
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     publishWebProjects: false
     modifyOutputPath: true
@@ -61,20 +65,21 @@ steps:
     rootFolderOrFile: $(Build.ArtifactStagingDirectory)
     includeRootFolder: false
     archiveType: 7z
-    archiveFile: '$(Build.ArtifactStagingDirectory)/DiskSpeedTest.7z'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.Repository.Name).7z'
     replaceExistingArchive: true
 
 # Release to GitHub
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/github-release?view=azure-devops
 - task: GitHubRelease@1
   displayName: 'Release to GitHub'
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  condition: and(succeeded(), in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop'))
   inputs:
-    gitHubConnection: 'github.com_ptr727'
+    gitHubConnection: $(GitHubConnection)
     repositoryName: $(Build.Repository.Name)
     action: create
     target: $(Build.SourceVersion)
     tagSource: userSpecifiedTag
     tag: $(GitVersion.NuGetVersion)
     title: $(GitVersion.NuGetVersion)
-    assets: '$(Build.ArtifactStagingDirectory)/DiskSpeedTest.7z'
+    assets: '$(Build.ArtifactStagingDirectory)/$(Build.Repository.Name).7z'
+    isPreRelease: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}
