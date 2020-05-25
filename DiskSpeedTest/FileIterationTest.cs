@@ -11,9 +11,6 @@ namespace DiskSpeedTest
         public FileIterationTest(FileIterationConfig config)
         {
             Config = config;
-            Buffer = new byte[BufferSize];
-            Random random = new Random();
-            random.NextBytes(Buffer);
         }
 
         public int Run()
@@ -104,6 +101,7 @@ namespace DiskSpeedTest
         private void ReadFilesInFolder(string folder, out int folderCount, out int fileCount)
         {
             // Get a list of all the files and directories
+            // TODO: Error handling
             FileEx.EnumerateDirectories(new List<string> { folder }, out List<FileInfo> fileInfoList, out List<DirectoryInfo> dirInfoList);
             folderCount = dirInfoList.Count;
             fileCount = fileInfoList.Count;
@@ -117,32 +115,52 @@ namespace DiskSpeedTest
 
         private void WriteFile(string filePath)
         {
-            using FileStream stream = File.Create(filePath);
-            int size = Config.FileSize;
-            do
+            // Create the file
+            using FileStream stream = File.Open(filePath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+
+            // Buffer with random data
+            byte[] buffer = new byte[BufferSize];
+            Random rand = new Random();
+
+            // Write in buffer chunks
+            long remaining = Config.FileSize;
+            while (remaining > 0)
             {
-                int chunk = size > Buffer.Length ? Buffer.Length : size;
-                stream.Write(Buffer, 0, chunk);
-                size -= chunk;
+                // Fill buffer with random data
+                rand.NextBytes(buffer);
+                // Write
+                long writesize = Math.Min(remaining, Convert.ToInt64(buffer.Length));
+                stream.Write(buffer, 0, Convert.ToInt32(writesize));
+                // Remaining
+                remaining -= writesize;
             }
-            while (size > 0);
+
+            // Close
+            stream.Close();
         }
 
         private void ReadFile(string filePath)
         {
-            using FileStream stream = File.OpenRead(filePath);
-            int size = (int)stream.Length;
-            do
-            {
-                int chunk = size > Buffer.Length ? Buffer.Length : size;
-                stream.Read(Buffer, 0, chunk);
-                size -= chunk;
-            }
-            while (size > 0);
-        }
+            // Open the file
+            using FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
 
+            // Read in buffer chunks
+            byte[] buffer = new byte[BufferSize];
+            long remaining = stream.Length;
+            while (remaining > 0)
+            {
+                // Read
+                long readsize = Math.Min(remaining, Convert.ToInt64(buffer.Length));
+                stream.Read(buffer, 0, Convert.ToInt32(readsize));
+                // Remaining
+                remaining -= readsize;
+            }
+
+            // Close
+            stream.Close();
+        }
+        
         private readonly FileIterationConfig Config;
         private const int BufferSize = 64 * Format.KiB;
-        private readonly byte[] Buffer;
     }
 }
