@@ -22,7 +22,7 @@
     // Test time in seconds
     "testtime": 120,
     // Time to rest between test runs
-    "resttime": 0
+    "resttime": 5
   },
   // FileIterationTest config
   "fileiterationtest": {

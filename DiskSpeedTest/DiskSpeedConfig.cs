@@ -6,11 +6,6 @@ namespace DiskSpeedTest
 {
     public class DiskSpeedConfig
     {
-        public DiskSpeedConfig()
-        {
-            Targets = new List<string>();
-        }
-
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
@@ -18,7 +13,7 @@ namespace DiskSpeedTest
         public string ResultFile { get; set; } = @"SpeedTestResult.csv";
 
         [JsonProperty("targets")]
-        public List<string> Targets { get; }
+        public List<string> Targets { get; } = new List<string>();
 
         [JsonProperty("targetsize")]
         public long TargetSize { get; set; } = 64L * Format.GiB;
@@ -36,6 +31,6 @@ namespace DiskSpeedTest
         public int TestTime { get; set; } = 120;
 
         [JsonProperty("resttime")]
-        public int RestTime { get; set; }
+        public int RestTime { get; set; } = 5;
     }
 }

@@ -6,11 +6,6 @@ namespace DiskSpeedTest
 {
     public class FileIterationConfig
     {
-        public FileIterationConfig()
-        {
-            Targets = new List<string>();
-        }
-
         [JsonProperty("enabled")]
         public bool Enabled { get; set; } = true;
 
@@ -18,7 +13,7 @@ namespace DiskSpeedTest
         public string ResultFile { get; set; } = @"FileIterationTestResult.csv";
 
         [JsonProperty("targets")]
-        public List<string> Targets { get; }
+        public List<string> Targets { get; } = new List<string>();
 
         [JsonProperty("folderdepth")]
         public int FolderDepth { get; set; } = 3;

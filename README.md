@@ -1,9 +1,11 @@
 # DiskSpeedTest
 
 Utility to automate iterative IO performance tests.  
-The tool includes two tests, one using the [DiskSpd](https://github.com/microsoft/diskspd) utility, and another iterating bulk file create, read, and delete operations.
 
-I created the utility to help [troubleshoot](https://blog.insanegenius.com/2020/01/16/unraid-smb-performance-v6-7-2-vs-v6-8-1/) Unraid  SMB performance issues.
+The tool includes two tests:
+
+- Automating iterative [DiskSpd](https://github.com/microsoft/diskspd) runs with varying block sizes and varying read/write ratios.
+- Recursive file create, write, read, and delete operations.
 
 ## License
 
@@ -56,7 +58,7 @@ CI is on [Azure DevOps](https://dev.azure.com/pieterv/DiskSpeedTest).
     // Test time in seconds
     "testtime": 120,
     // Time to rest between test runs
-    "resttime": 0
+    "resttime": 5
   },
   // FileIterationTest config
   "fileiterationtest": {
@@ -105,7 +107,8 @@ Example: `DiskSpeedTest.exe --settings DiskSpeedTest.json runtests`.
 
 ## CSV Output Files
 
-Import the CSV results in Excel and use pivot tables for analysis.
+Import the CSV results in Excel and use pivot tables for analysis.  
+An [example](./DiskSpeedResult.xlsx) is included in the repository.
 
 ### DiskSpeedTest CSV Format
 
@@ -115,7 +118,28 @@ Import the CSV results in Excel and use pivot tables for analysis.
 
 `UTC, Target, FileSize, FolderDepth, FoldersPerFolder, FilesPerFolder, FolderCount, FileCount, CreateTime, ReadTime, DeleteTime`
 
+## Unraid SMB Performance
+
+I wrote this tool to help me troubleshoot [poor SMB performance](https://forums.unraid.net/bug-reports/stable-releases/slow-smb-performance-r566/) on [Unraid](https://unraid.net/), specifically concurrent writes or concurrent reads and writes.
+
+After many tests I came to the conclusion that the performance degradation is caused by the Unraid User Share FUSE code:
+
+- Unraid User Share vs. Windows Server, VM running on Unraid, not a hardware issue.
+- Unraid User Share vs. Samba on Ubuntu Server, EXT4, VM running on Unraid, not a Samba issue.
+- Unraid User Share vs. Samba on Ubuntu Server, BTRFS, on same hardware, not a BTRFS issue.
+- Unraid User Share vs. Samba on Proxmox, ZFS, on same hardware, not a hardware issue.
+- Unraid User Share vs. Unraid Disk Share, clearly a User Share FUSE code performance issue.
+
+Testing against ZFS is not really apples-to-apples, [SnapRAID](https://github.com/amadvance/snapraid) plus [MergerFS](https://github.com/trapexit/mergerfs) would be closer to Unraid's architecture, but was not tested.  
+For more test details and results refer to my [blog](https://blog.insanegenius.com/tag/unraid/) posts.
+
 ## Notes
 
 - `DiskSpd` can be destructive, especially when running elevated, _**use at your own risk.**_
 - `DiskSpd` will use privileged IO functions when running elevated. Test results will differ between running elevated or not, do not mix test results.
+- Special considerations are made for ZFS filesystems:
+  - The `DiskSpd -c` command, used to create test target files, creates semi-sparse files on ZFS with LZ4 compression, e.g. 64GiB file is 2GiB on disk.
+  - For write testing on COW filesystems there is no point in pre-filling the file as all writes are in new blocks, but the same file is used for the read tests.
+  - For read testing the read contents should result in disk IO, not just decompression as may happen with sparse files or highly compressible content.
+  - Instead of using `DiskSpd -c`, the test file is created and filled with random data such that the allocated size on disk is near identical to the logical size.
+  - The `DiskSpd -Zr` option is used to randomize the contents of every write block, this adds some test overhead, but prevents LZ4 from compressing the data and writing less IO than requested.

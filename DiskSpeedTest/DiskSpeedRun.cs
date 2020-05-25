@@ -6,12 +6,6 @@ namespace DiskSpeedTest
 {
     public class DiskSpeedRun
     {
-        public DiskSpeedRun()
-        {
-            TestTargets = new List<DiskSpeedTarget>();
-            TestParameters = new List<DiskSpeedParameter>();
-        }
-
         public void AddTestTargets(List<string> fileNames, long fileSize)
         {
             if (fileNames == null)
@@ -48,7 +42,7 @@ namespace DiskSpeedTest
             return true;
         }
 
-        public List<DiskSpeedTarget> TestTargets { get; }
-        public List<DiskSpeedParameter> TestParameters { get; }
+        public List<DiskSpeedTarget> TestTargets { get; } = new List<DiskSpeedTarget>();
+        public List<DiskSpeedParameter> TestParameters { get; } = new List<DiskSpeedParameter>();
     }
 }

@@ -36,11 +36,12 @@ namespace DiskSpeedTest
             foreach (DiskSpeedTarget testTarget in testRun.TestTargets)
             {
                 // Reuse the existing file, or create a new file file
+                bool targetCreated = false;
                 if (testTarget.DoesTargetExist())
-                    ConsoleEx.WriteLine($"Using existing test file : {testTarget.FileName}");
+                    ConsoleEx.WriteLine($"Using existing test file : {testTarget.FileName} ({Format.BytesToKibi(testTarget.FileSize)})");
                 else
                 {
-                    ConsoleEx.WriteLine($"Creating new test file : {testTarget.FileName}");
+                    ConsoleEx.WriteLine($"Creating new test file : {testTarget.FileName} ({Format.BytesToKibi(testTarget.FileSize)})");
                     if (!testTarget.CreateTarget())
                     {
                         ConsoleEx.WriteLineError($"Failed to create test file : {testTarget.FileName}");
@@ -50,6 +51,7 @@ namespace DiskSpeedTest
                         result = -1;
                         continue;
                     }
+                    targetCreated = true;
                 }
                 ConsoleEx.WriteLine("");
 
@@ -64,9 +66,10 @@ namespace DiskSpeedTest
                         $"iteration to complete by {DateTime.Now + TimeSpan.FromSeconds(thisTestTime)}, " +
                         $"remaining tests to complete by {DateTime.Now + TimeSpan.FromSeconds(remainingSeconds + thisTestTime)}");
 
-                    // Sleep between tests
+                    // Sleep between tests and between file creation and test
                     // This may be required if the target file is in use after a test
-                    if (Config.RestTime > 0 && iteration > 1)
+                    if (Config.RestTime > 0 &&
+                        (iteration > 1 || targetCreated))
                     {
                         // TODO : Add Ctrl-C handler so that we can break the test during wait
                         ConsoleEx.WriteLine($"Resting for {Config.RestTime} seconds...");
